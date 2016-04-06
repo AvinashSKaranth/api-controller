@@ -1,6 +1,34 @@
 # api-controller
 Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Management and http caching.
 
+```java
+ApiController APIc = new ApiController(this);//Calling Library
+
+//GET
+String response  = APIc.GetRequest(String URL,HashMap<String,String> parameters);
+
+//POST
+String response  = APIc.PostRequest(String URL,HashMap<String,String> parameters);
+
+//DOWNLOAD BACKGROUND
+String destination  = APIc.download_file(String URL,String AbsoluteDestination);
+//If you dont add the extension in AbsoluteDestination then extension will added based in MimeType of the downloaded file
+//return the downloaded path, creates the folder if does not exist.
+
+//DOWNLOAD WITH NOTIFICATION
+String destination  = APIc.download_file_notify(String URL,String AbsoluteDestination);
+//Shows progress in notification bar and then closes it on finishing
+//return the downloaded path, creates the folder if does not exist.
+```
+
+ANDROID MANIFEST
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+
+
 **GET**
 ```java
 ApiController APIc = new ApiController(this);
@@ -61,6 +89,7 @@ new Thread( new Runnable() {
 
 **DOWNLOAD BACKGROUND**
 ```java
+ApiController APIc = new ApiController(this);
  new Thread( new Runnable() {
   @Override
   public void run() {
@@ -78,6 +107,7 @@ new Thread( new Runnable() {
 
 **DOWNLOAD NOTIFY**
 ```java
+ApiController APIc = new ApiController(this);
 new Thread( new Runnable() {
   @Override
   public void run() {
