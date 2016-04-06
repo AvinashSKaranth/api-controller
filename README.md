@@ -4,10 +4,10 @@ Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Managemen
 ```java
 ApiController APIc = new ApiController(this);//Calling Library
 
-//GET
+//GET : parmetes need to be only string
 String response  = APIc.GetRequest(String URL,HashMap<String,String> parameters);
 
-//POST
+//POST : parmeters can be a string or a file, see example below
 String response  = APIc.PostRequest(String URL,HashMap<String,String> parameters);
 
 //DOWNLOAD BACKGROUND
