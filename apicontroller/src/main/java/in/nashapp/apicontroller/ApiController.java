@@ -1,13 +1,8 @@
 package in.nashapp.apicontroller;
 
-import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.http.HttpResponseCache;
-import android.net.sip.SipSession;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import java.io.BufferedInputStream;

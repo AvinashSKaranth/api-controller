@@ -1,5 +1,27 @@
 apply plugin: 'com.android.library'
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'android-api-controller'
 
+    publishedGroupId = 'in.nashapp.apicontroller'
+    libraryName = 'AndroidAPIController'
+    artifact = 'api-controller'
+
+    libraryDescription = 'Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Management and http caching.'
+
+    siteUrl = 'https://www.nashapp.in'
+    gitUrl = 'https://github.com/AvinashSKaranth/api-controller.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'avinashskaranth'
+    developerName = 'Avinash S Karanth'
+    developerEmail = 'nashapp.mail@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -23,3 +45,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
 }
+apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/installv.gradle'
+apply from: 'https://raw.githubusercontent.com/numetriclabz/jcenter/master/bintrayv.gradle'
