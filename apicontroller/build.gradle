@@ -4,8 +4,8 @@ ext {
     bintrayName = 'android-api-controller'
 
     publishedGroupId = 'in.nashapp.apicontroller'
-    libraryName = 'AndroidAPIController'
-    artifact = 'androidapicontroller'
+    libraryName = 'APIController'
+    artifact = 'apicontroller'
 
     libraryDescription = 'Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Management and http caching.'
 
