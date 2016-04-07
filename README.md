@@ -141,6 +141,7 @@ public void alertDialog(String title,String Message){
     }
 ```
 **License**
+
 Copyright 2016 Avinash S Karanth
 
 Licensed under the Apache License, Version 2.0 (the "License");
