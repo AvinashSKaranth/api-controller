@@ -3,10 +3,22 @@
 
 Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Management and http caching.
 
+GRADLE LINK
+```xml
+compile 'in.nashapp.apicontroller:apicontroller:1.0.0'
+```
+
+ANDROID MANIFEST
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
+
 ```java
 ApiController APIc = new ApiController(this);//Calling Library
 
-//GET : parmetes need to be only string
+//GET : parmeters need to be only string
 String response  = APIc.GetRequest(String URL,HashMap<String,String> parameters);
 
 //POST : parmeters can be a string or a file, see example below
@@ -23,17 +35,9 @@ String destination  = APIc.download_file_notify(String URL,String AbsoluteDestin
 //return the downloaded path, creates the folder if does not exist.
 ```
 
-ANDROID MANIFEST
-```xml
-<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-```
 
-GRADLE LINK
-```xml
-compile 'in.nashapp.apicontroller:apicontroller:1.0.0'
-```
+
+
 **GET**
 ```java
 ApiController APIc = new ApiController(this);
