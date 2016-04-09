@@ -30,7 +30,10 @@ ANDROID MANIFEST
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
 
-
+GRADLE LINK
+```xml
+compile 'in.nashapp.apicontroller:apicontroller:1.0.0'
+```
 **GET**
 ```java
 ApiController APIc = new ApiController(this);
