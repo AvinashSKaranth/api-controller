@@ -5,7 +5,7 @@ Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Managemen
 
 GRADLE LINK
 ```xml
-compile 'in.nashapp.apicontroller:apicontroller:1.0.0'
+compile 'in.nashapp.apicontroller:apicontroller:1.0.1'
 ```
 
 ANDROID MANIFEST
@@ -25,12 +25,12 @@ String response  = APIc.GetRequest(String URL,HashMap<String,String> parameters)
 String response  = APIc.PostRequest(String URL,HashMap<String,String> parameters);
 
 //DOWNLOAD BACKGROUND
-String destination  = APIc.download_file(String URL,String AbsoluteDestination);
+String destination  = APIc.DownloadFile(String URL,String AbsoluteDestination);
 //If you dont add the extension in AbsoluteDestination then extension will added based in MimeType of the downloaded file
 //return the downloaded path, creates the folder if does not exist.
 
 //DOWNLOAD WITH NOTIFICATION
-String destination  = APIc.download_file_notify(String URL,String AbsoluteDestination);
+String destination  = APIc.DownloadFileNotify(String URL,String AbsoluteDestination);
 //Shows progress in notification bar and then closes it on finishing
 //return the downloaded path, creates the folder if does not exist.
 ```
@@ -102,7 +102,7 @@ ApiController APIc = new ApiController(this);
  new Thread( new Runnable() {
   @Override
   public void run() {
-      final String result  = APIc.download_file("http://nashapp.in/socialsignin.png", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/socialsignin.png");
+      final String result  = APIc.DownloadFile("http://nashapp.in/socialsignin.png", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/socialsignin.png");
       new Handler(Looper.getMainLooper()).post(new Runnable() {
           @Override
           public void run() {
@@ -120,7 +120,7 @@ ApiController APIc = new ApiController(this);
 new Thread( new Runnable() {
   @Override
   public void run() {
-      final String result  = APIc.download_file_notify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
+      final String result  = APIc.DownloadFileNotify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
       new Handler(Looper.getMainLooper()).post(new Runnable() {
           @Override
           public void run() {
