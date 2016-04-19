@@ -1,10 +1,24 @@
 # api-controller
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-api--controller-green.svg?style=true)](https://android-arsenal.com/details/1/3401)
+
 Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Management and http caching.
+
+GRADLE LINK
+```xml
+compile 'in.nashapp.apicontroller:apicontroller:1.0.0'
+```
+
+ANDROID MANIFEST
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+```
 
 ```java
 ApiController APIc = new ApiController(this);//Calling Library
 
-//GET : parmetes need to be only string
+//GET : parmeters need to be only string
 String response  = APIc.GetRequest(String URL,HashMap<String,String> parameters);
 
 //POST : parmeters can be a string or a file, see example below
@@ -21,12 +35,7 @@ String destination  = APIc.download_file_notify(String URL,String AbsoluteDestin
 //return the downloaded path, creates the folder if does not exist.
 ```
 
-ANDROID MANIFEST
-```xml
-<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-```
+
 
 
 **GET**
@@ -140,3 +149,18 @@ public void alertDialog(String title,String Message){
         alertDialog.show();
     }
 ```
+**License**
+
+Copyright 2016 Avinash S Karanth
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
