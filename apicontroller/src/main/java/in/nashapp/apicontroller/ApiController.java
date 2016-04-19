@@ -43,7 +43,6 @@ public class ApiController{
     public String GetRequest(String urlString,HashMap<String, String> params,boolean cached){
         String charset = "UTF-8";
         DataOutputStream wr = null;
-        Log.i("APICGetRequest", urlString);
         String webPage = "";
         CookieManager cookieManager = new CookieManager( new PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
@@ -56,7 +55,7 @@ public class ApiController{
             long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
             HttpResponseCache.install(httpCacheDir, httpCacheSize);
         }catch (IOException e) {
-            Log.i("APICGetRequest", "HTTP response cache installation failed:" + e.getMessage());
+            Log.i("ApiController", "HTTP response cache installation failed:" + e.getMessage());
         }
         int i=0;
        String request_url=urlString+"?";
@@ -85,17 +84,15 @@ public class ApiController{
                 webPage += data + "\n";
             }
         } catch (Exception e) {
-            Log.e("APICGetRequest",e.getStackTrace()+"");
+            Log.e("ApiController",e.getStackTrace()+"");
             webPage = "";
         }
-        Log.i("APICResult", webPage);
         return webPage;
     }
     public String PostRequest(String url,HashMap<String, String> params){
         return PostRequest(url, params, true);
     }
     public String PostRequest(String url,HashMap<String, String> params,Boolean cached){
-        Log.i("APICGetRequest", url);
         StringBuilder result = new StringBuilder();
         String lineEnd = "\r\n";
         String twoHyphens = "--";
@@ -114,7 +111,7 @@ public class ApiController{
             long httpCacheSize = 100 * 1024 * 1024; // 10 MiB
             HttpResponseCache.install(httpCacheDir, httpCacheSize);
         }catch (IOException e) {
-            Log.i("APIConnector", "HTTP response cache installation failed:" + e.getStackTrace());
+            Log.i("ApiController", "HTTP response cache installation failed:" + e.getStackTrace());
         }
         String PostResult  ="0";
         HttpURLConnection conn =null;
@@ -137,7 +134,6 @@ public class ApiController{
         wr = new DataOutputStream(conn.getOutputStream());
         int i = 0;
         for (String key : params.keySet()) {
-                Log.d("PostVariable",key+" "+params.get(key));
                 if (i != 0){wr.writeBytes("&");}
                 if(params.get(key).startsWith("file:///")){
                     String FileLocation=params.get(key).replace("file://","");
@@ -164,7 +160,7 @@ public class ApiController{
                     wr.writeBytes(twoHyphens + boundary + lineEnd);
                     wr.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd);
                     wr.writeBytes("Content-Type: text/plain; charset=" + charset+lineEnd);
-                    wr.writeBytes(lineEnd+URLEncoder.encode(params.get(key),charset));
+                    wr.writeBytes(lineEnd + params.get(key));
                     wr.writeBytes(lineEnd);
                     wr.writeBytes(twoHyphens + boundary + lineEnd);
                 }
@@ -183,7 +179,7 @@ public class ApiController{
             while ((line = reader.readLine()) != null) {
                 result.append(line).append("\n");
             }
-            Log.d("PostRequest", "result: " + result.toString());
+            //Log.d("PostRequest", "result: " + result.toString());
             PostResult  = result.toString();
         } catch (IOException e) {
             Log.e("ApiController", e.getStackTrace() + "");
@@ -193,10 +189,9 @@ public class ApiController{
         return PostResult;
     }
 
-    public String download_file(String urlString,String dst){
+    public String DownloadFile(String urlString,String dst){
         if(!new File(dst.substring(0,dst.lastIndexOf("/"))).exists())
             new File(dst.substring(0,dst.lastIndexOf("/"))).mkdirs();
-        Log.d("download_file",dst+" "+urlString);
         CookieManager cookieManager = new CookieManager( new PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         String filePath ="";
@@ -227,7 +222,6 @@ public class ApiController{
                 filePath = dst;
             else
                 filePath = dst+"."+extension;
-            Log.d("download_file",filePath);
             InputStream is = connection.getInputStream();
             FileOutputStream outputStream = new FileOutputStream(filePath);
             int bytesRead = -1;
@@ -239,15 +233,14 @@ public class ApiController{
             is.close();
             connection.disconnect();
         } catch (Exception e) {
-            Log.e("APICDownloadFile",e.getStackTrace()+"");
+            Log.e("ApiController",e.getStackTrace()+"");
             return null;
         }
         return filePath;
     }
-    public String download_file_notify(String urlString,String dst){
+    public String DownloadFileNotify(String urlString,String dst){
         if(!new File(dst.substring(0,dst.lastIndexOf("/"))).exists())
             new File(dst.substring(0,dst.lastIndexOf("/"))).mkdirs();
-        Log.d("download_file",dst+" "+urlString);
         CookieManager cookieManager = new CookieManager( new PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         String filePath ="";
@@ -285,7 +278,6 @@ public class ApiController{
                 filePath = dst;
             else
                 filePath = dst+"."+extension;
-            Log.d("download_file",filePath);
             InputStream is = connection.getInputStream();
             FileOutputStream outputStream = new FileOutputStream(filePath);
             int bytesRead = -1;
@@ -305,7 +297,7 @@ public class ApiController{
             is.close();
             connection.disconnect();
         } catch (Exception e) {
-            Log.e("APICDownloadFile",e.getStackTrace()+"");
+            Log.e("ApiController",e.getStackTrace()+"");
             return null;
         }
         return filePath;

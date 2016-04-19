@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.download_file("http://nashapp.in/socialsignin.png", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/socialsignin.png");
+                            final String result  = APIc.DownloadFile("http://nashapp.in/socialsignin.png", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/socialsignin.png");
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.download_file_notify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
+                            final String result  = APIc.DownloadFileNotify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
