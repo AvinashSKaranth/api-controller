@@ -181,9 +181,9 @@ public class ApiController{
             }
             //Log.d("PostRequest", "result: " + result.toString());
             PostResult  = result.toString();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e("ApiController", e.getStackTrace() + "");
-            PostResult="0";
+            PostResult="";
         }
         conn.disconnect();
         return PostResult;
