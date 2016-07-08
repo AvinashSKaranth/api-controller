@@ -1,5 +1,4 @@
 package in.nashapp.apicontroller;
-
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.http.HttpResponseCache;
@@ -55,7 +54,7 @@ public class ApiController{
             long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
             HttpResponseCache.install(httpCacheDir, httpCacheSize);
         }catch (IOException e) {
-            Log.i("ApiController", "HTTP response cache installation failed:" + e.getMessage());
+            Log.i("ApiController", "HTTP response cache installation failed:" + Log.getStackTraceString(e));
         }
         int i=0;
        String request_url=urlString+"?";
@@ -81,10 +80,13 @@ public class ApiController{
             BufferedReader reader =new BufferedReader(new InputStreamReader(is, "UTF-8"));
             String data="";
             while ((data = reader.readLine()) != null){
-                webPage += data + "\n";
+                if(data.equals(""))
+                    webPage += data ;
+                else
+                    webPage += "\n" +data ;
             }
         } catch (Exception e) {
-            Log.e("ApiController",e.getStackTrace()+"");
+            Log.e("ApiController",Log.getStackTraceString(e));
             webPage = "";
         }
         return webPage;
@@ -111,7 +113,7 @@ public class ApiController{
             long httpCacheSize = 100 * 1024 * 1024; // 10 MiB
             HttpResponseCache.install(httpCacheDir, httpCacheSize);
         }catch (IOException e) {
-            Log.i("ApiController", "HTTP response cache installation failed:" + e.getStackTrace());
+            Log.i("ApiController", "HTTP response cache installation failed:" + Log.getStackTraceString(e));
         }
         String PostResult  ="0";
         HttpURLConnection conn =null;
@@ -169,7 +171,7 @@ public class ApiController{
         wr.flush();
         wr.close();
         } catch (Exception e) {
-            Log.e("ApiController",e.getStackTrace()+"");
+            Log.e("ApiController",Log.getStackTraceString(e));
         }
         try {
             InputStream in = new BufferedInputStream(conn.getInputStream());
@@ -177,12 +179,16 @@ public class ApiController{
 
             String line;
             while ((line = reader.readLine()) != null) {
-                result.append(line).append("\n");
+                if(result.toString().equals(""))
+                    result.append(line);
+                else
+                    result.append("\n").append(line);
+
             }
             //Log.d("PostRequest", "result: " + result.toString());
             PostResult  = result.toString();
         } catch (Exception e) {
-            Log.e("ApiController", e.getStackTrace() + "");
+            Log.e("ApiController",Log.getStackTraceString(e));
             PostResult="";
         }
         conn.disconnect();
@@ -233,7 +239,7 @@ public class ApiController{
             is.close();
             connection.disconnect();
         } catch (Exception e) {
-            Log.e("ApiController",e.getStackTrace()+"");
+            Log.e("ApiController",Log.getStackTraceString(e));
             return null;
         }
         return filePath;
@@ -297,7 +303,7 @@ public class ApiController{
             is.close();
             connection.disconnect();
         } catch (Exception e) {
-            Log.e("ApiController",e.getStackTrace()+"");
+            Log.e("ApiController",Log.getStackTraceString(e));
             return null;
         }
         return filePath;

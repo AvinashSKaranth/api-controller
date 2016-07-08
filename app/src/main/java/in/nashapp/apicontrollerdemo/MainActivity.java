@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         APIc = new ApiController(this);
-        final String names[] = {"Get Request","Post Request","Post File + Variables","Download","Download with Notify"};
+        final String names[] = {"Get Request","Post Request","Post File + Variables","Download","Download with Notify","Download without extension","Download wrong url"};
         ListView listview = (ListView) findViewById(R.id.listview);
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, names);
         listview.setAdapter(adapter);
@@ -122,6 +122,44 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             final String result  = APIc.DownloadFileNotify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Intent intent = new Intent();
+                                    //intent.setAction(Intent.ACTION_VIEW);
+                                    //intent.setDataAndType(Uri.parse("file://" + result), "image/*");
+                                    //startActivity(intent);
+                                    alertDialog("Result", result);
+                                }
+                            });
+                        }
+                    }).start();
+
+                }
+                else if(position==5){
+                    new Thread( new Runnable() {
+                        @Override
+                        public void run() {
+                            final String result  = APIc.DownloadFileNotify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test");
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Intent intent = new Intent();
+                                    //intent.setAction(Intent.ACTION_VIEW);
+                                    //intent.setDataAndType(Uri.parse("file://" + result), "image/*");
+                                    //startActivity(intent);
+                                    alertDialog("Result", result);
+                                }
+                            });
+                        }
+                    }).start();
+
+                }
+                else if(position==6){
+                    new Thread( new Runnable() {
+                        @Override
+                        public void run() {
+                            final String result  = APIc.DownloadFileNotify("http://nashapp.in/test123", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
