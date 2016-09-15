@@ -5,7 +5,7 @@ Run GET,POST and DOWNLOAD API on Android. Library takes care of Cookie Managemen
 
 GRADLE LINK
 ```xml
-compile 'in.nashapp.apicontroller:apicontroller:1.0.2'
+compile 'in.nashapp.apicontroller:apicontroller:1.0.3'
 ```
 
 ANDROID MANIFEST
