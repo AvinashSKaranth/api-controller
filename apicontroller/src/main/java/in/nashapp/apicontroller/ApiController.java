@@ -194,6 +194,143 @@ public class ApiController{
         conn.disconnect();
         return PostResult;
     }
+    public String PostDownload(String url,String dst,HashMap<String, String> params,Boolean cached){
+        if(!new File(dst.substring(0,dst.lastIndexOf("/"))).exists())
+            new File(dst.substring(0,dst.lastIndexOf("/"))).mkdirs();
+        String filePath ="";
+        StringBuilder result = new StringBuilder();
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary =  "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1*1024*1024;
+        CookieManager cookieManager = new CookieManager( new in.nashapp.apicontroller.PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault(cookieManager);
+        try {
+            File httpCacheDir;
+            if(C.getExternalCacheDir()!=null)
+                httpCacheDir = new File(C.getExternalCacheDir(), "http");
+            else
+                httpCacheDir = new File(C.getCacheDir(), "http");
+            long httpCacheSize = 100 * 1024 * 1024; // 10 MiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+        }catch (IOException e) {
+            Log.i("ApiController", "HTTP response cache installation failed:" + Log.getStackTraceString(e));
+        }
+        String PostResult  ="0";
+        HttpURLConnection conn =null;
+        try {
+            URL Url = new URL(url);
+            String charset = "UTF-8";
+            conn = (HttpURLConnection)Url.openConnection();
+            DataOutputStream wr = null;
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Accept-Charset", charset);
+            conn.setReadTimeout(300000);
+            conn.setConnectTimeout(300000);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            //conn.setRequestMethod("POST");
+            //conn.setReadTimeout(30000);
+            //conn.setDoOutput(false);
+            if(cached)
+                conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60 *3);
+            conn.connect();
+            wr = new DataOutputStream(conn.getOutputStream());
+            int i = 0;
+            for (String key : params.keySet()) {
+                if (i != 0){wr.writeBytes("&");}
+                if(params.get(key).startsWith("file:///")){
+                    String FileLocation=params.get(key).replace("file://","");
+                    FileInputStream fileInputStream = new FileInputStream(new File(FileLocation) );
+                    wr.writeBytes(twoHyphens + boundary + lineEnd);
+                    wr.writeBytes("Content-Disposition: form-data; name=\""+key+"\";filename=\"" + FileLocation +"\"" + lineEnd);
+                    wr.writeBytes(lineEnd);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    buffer = new byte[bufferSize];
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                    while (bytesRead > 0)
+                    {
+                        wr.write(buffer, 0, bufferSize);
+                        bytesAvailable = fileInputStream.available();
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                    }
+
+                    wr.writeBytes(lineEnd);
+                    wr.writeBytes(twoHyphens + boundary + lineEnd);
+                    fileInputStream.close();
+                }else {
+                    wr.writeBytes(twoHyphens + boundary + lineEnd);
+                    wr.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd);
+                    wr.writeBytes("Content-Type: text/plain; charset=" + charset+lineEnd);
+                    wr.writeBytes(lineEnd + params.get(key));
+                    wr.writeBytes(lineEnd);
+                    wr.writeBytes(twoHyphens + boundary + lineEnd);
+                }
+                i++;
+            }
+            wr.flush();
+            wr.close();
+            String raw  = "";
+            String type = "";
+            String extension="";
+            try{raw = conn.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
+            try{type = conn.getContentType();}catch (Exception e){type="";}
+            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
+                extension = raw.split("=")[1].replace("\"","");
+                extension = extension.substring(extension.indexOf(".")+1);
+            }else if(!type.equals("")){
+                MimeType mimeType = new MimeType();
+                extension = mimeType.get_extension_from_mimetye(type);
+            } else if(url.substring(url.lastIndexOf("/")+1).contains(".")) {
+                extension =url.substring(url.lastIndexOf("/")+1);
+            }else{
+                extension = "png";
+            }
+            if(dst.substring(dst.lastIndexOf("/")+1).contains("."))
+                filePath = dst;
+            else
+                filePath = dst+"."+extension;
+            InputStream is = conn.getInputStream();
+            FileOutputStream outputStream = new FileOutputStream(filePath);
+            bytesRead = -1;
+            buffer = new byte[1024000];
+            while ((bytesRead = is.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.close();
+            is.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            Log.e("ApiController",Log.getStackTraceString(e));
+        }
+
+    return filePath;
+        /*
+        try {
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if(result.toString().equals(""))
+                    result.append(line);
+                else
+                    result.append("\n").append(line);
+
+            }
+            //Log.d("PostRequest", "result: " + result.toString());
+            PostResult  = result.toString();
+        } catch (Exception e) {
+            Log.e("ApiController",Log.getStackTraceString(e));
+            PostResult="";
+        }*/
+    }
 
     public String DownloadFile(String urlString,String dst){
         if(!new File(dst.substring(0,dst.lastIndexOf("/"))).exists())

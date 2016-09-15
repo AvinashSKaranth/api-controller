@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         APIc = new ApiController(this);
-        final String names[] = {"Get Request","Post Request","Post File + Variables","Download","Download with Notify","Download without extension","Download wrong url"};
+        final String names[] = {"Get Request","Post Request","Post File + Variables","Download","Download with Notify","Download without extension","Download wrong url","Download with with POST file"};
         ListView listview = (ListView) findViewById(R.id.listview);
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, names);
         listview.setAdapter(adapter);
@@ -173,6 +173,22 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).start();
 
+                }
+                else if(position==7){
+                    new Thread( new Runnable() {
+                        @Override
+                        public void run() {
+                            HashMap<String,String> params = new HashMap<String, String>();
+                            params.put("uploaded_file", "file:///storage/emulated/0/download/Documentation.doc");
+                            final String result  = APIc.PostDownload("https://quikconvert.gq", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/tmp_file",params,false);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    alertDialog("Result", result);
+                                }
+                            });
+                        }
+                    }).start();
                 }
 
 
