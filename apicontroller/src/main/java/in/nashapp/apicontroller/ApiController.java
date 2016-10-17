@@ -284,13 +284,13 @@ public class ApiController{
             String extension="";
             try{raw = conn.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = conn.getContentType();}catch (Exception e){type="";}
-            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                extension = raw.split("=")[1].replace("\"","");
-                extension = extension.substring(extension.indexOf(".")+1);
-            }else if(!type.equals("")){
+            if(!type.equals("")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
-            } else if(url.substring(url.lastIndexOf("/")+1).contains(".")) {
+            }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
+                extension = raw.split("=")[1].replace("\"","");
+                extension = extension.substring(extension.indexOf(".")+1);
+            }else if(url.substring(url.lastIndexOf("/")+1).contains(".")) {
                 extension =url.substring(url.lastIndexOf("/")+1);
             }else{
                 extension = "png";
@@ -340,13 +340,13 @@ public class ApiController{
             String extension="";
             try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = connection.getContentType();}catch (Exception e){type="";}
-            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                extension = raw.split("=")[1].replace("\"","");
-                extension = extension.substring(extension.indexOf(".")+1);
-            }else if(!type.equals("")){
+            if(!type.equals("")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
-            } else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
+            }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
+                extension = raw.split("=")[1].replace("\"","");
+                extension = extension.substring(extension.indexOf(".")+1);
+            }else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
                 extension =urlString.substring(urlString.lastIndexOf("/")+1);
             }else{
                 extension = "png";
@@ -403,13 +403,14 @@ public class ApiController{
             String extension="";
             try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = connection.getContentType();}catch (Exception e){type="";}
-            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                extension = raw.split("=")[1].replace("\"","");
-                extension = extension.substring(extension.indexOf(".")+1);
-            }else if(!type.equals("")){
+            Log.d("ApiController",raw+" "+type);
+            if(!type.equals("")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
-            } else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
+            }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
+                extension = raw.split("=")[1].replace("\"","");
+                extension = extension.substring(extension.indexOf(".")+1);
+            }else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
                 extension =urlString.substring(urlString.lastIndexOf("/")+1);
             }else{
                 extension = "png";

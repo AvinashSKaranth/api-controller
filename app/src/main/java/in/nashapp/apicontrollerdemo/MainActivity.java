@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFileNotify("http://quiklrn.com/user/notification/attachment.php?notifier_attachment_id=9&auth_code=b62745967b36451b2159b22301a9d7a8", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/123.png");
+                            final String result  = APIc.DownloadFileNotify("http://quiklrn.com/user/notification/attachment.php?notifier_attachment_id=9&auth_code=b62745967b36451b2159b22301a9d7a8", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/data");
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
