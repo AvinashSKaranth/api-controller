@@ -183,7 +183,6 @@ public class ApiController{
                     result.append(line);
                 else
                     result.append("\n").append(line);
-
             }
             //Log.d("PostRequest", "result: " + result.toString());
             PostResult  = result.toString();
@@ -225,6 +224,7 @@ public class ApiController{
             String charset = "UTF-8";
             conn = (HttpURLConnection)Url.openConnection();
             DataOutputStream wr = null;
+            conn.setInstanceFollowRedirects(true);
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
             conn.setRequestMethod("POST");
@@ -233,9 +233,12 @@ public class ApiController{
             conn.setConnectTimeout(300000);
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            //conn.setRequestMethod("POST");
-            //conn.setReadTimeout(30000);
-            //conn.setDoOutput(false);
+            int status = conn.getResponseCode();
+            while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
+                String newUrl = conn.getHeaderField("Location");
+                conn = (HttpURLConnection) new URL(newUrl).openConnection();
+                status = conn.getResponseCode();
+            }
             if(cached)
                 conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60 *3);
             conn.connect();
@@ -309,27 +312,7 @@ public class ApiController{
         } catch (Exception e) {
             Log.e("ApiController",Log.getStackTraceString(e));
         }
-
     return filePath;
-        /*
-        try {
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if(result.toString().equals(""))
-                    result.append(line);
-                else
-                    result.append("\n").append(line);
-
-            }
-            //Log.d("PostRequest", "result: " + result.toString());
-            PostResult  = result.toString();
-        } catch (Exception e) {
-            Log.e("ApiController",Log.getStackTraceString(e));
-            PostResult="";
-        }*/
     }
 
     public String DownloadFile(String urlString,String dst){
@@ -345,6 +328,13 @@ public class ApiController{
             connection.setRequestMethod("GET");
             connection.setReadTimeout(30000);
             connection.setDoOutput(false);
+            connection.setInstanceFollowRedirects(true);
+            int status = connection.getResponseCode();
+            while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
+                String newUrl = connection.getHeaderField("Location");
+                connection = (HttpURLConnection) new URL(newUrl).openConnection();
+                status = connection.getResponseCode();
+            }
             String raw  = "";
             String type = "";
             String extension="";
@@ -397,9 +387,16 @@ public class ApiController{
         try {
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            connection.setInstanceFollowRedirects(true);
             connection.setRequestMethod("GET");
             connection.setReadTimeout(30000);
             connection.setDoOutput(false);
+            int status = connection.getResponseCode();
+            while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
+                String newUrl = connection.getHeaderField("Location");
+                connection = (HttpURLConnection) new URL(newUrl).openConnection();
+                status = connection.getResponseCode();
+            }
             int lenghtOfFile = connection.getContentLength();
             String raw  = "";
             String type = "";
