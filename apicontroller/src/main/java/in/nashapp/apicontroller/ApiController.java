@@ -233,12 +233,6 @@ public class ApiController{
             conn.setConnectTimeout(300000);
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            int status = conn.getResponseCode();
-            while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
-                String newUrl = conn.getHeaderField("Location");
-                conn = (HttpURLConnection) new URL(newUrl).openConnection();
-                status = conn.getResponseCode();
-            }
             if(cached)
                 conn.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60 *3);
             conn.connect();
@@ -282,9 +276,16 @@ public class ApiController{
             String raw  = "";
             String type = "";
             String extension="";
+            int status = conn.getResponseCode();
+            while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
+                String newUrl = conn.getHeaderField("Location");
+                conn = (HttpURLConnection) new URL(newUrl).openConnection();
+                status = conn.getResponseCode();
+            }
             try{raw = conn.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = conn.getContentType();}catch (Exception e){type="";}
-            if(!type.equals("")){
+            Log.d("ApiController",raw+"\t"+type);
+            if(!type.equals("")&&!type.equals("application/octet-stream")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
@@ -340,7 +341,7 @@ public class ApiController{
             String extension="";
             try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = connection.getContentType();}catch (Exception e){type="";}
-            if(!type.equals("")){
+            if(!type.equals("")&&!type.equals("application/octet-stream")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
@@ -404,7 +405,7 @@ public class ApiController{
             try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = connection.getContentType();}catch (Exception e){type="";}
             Log.d("ApiController",raw+" "+type);
-            if(!type.equals("")){
+            if(!type.equals("")&&!type.equals("application/octet-stream")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
