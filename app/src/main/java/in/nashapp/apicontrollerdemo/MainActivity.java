@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-
                 }
                 else if(position==4){
                     new Thread( new Runnable() {
@@ -134,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-
                 }
                 else if(position==5){
                     new Thread( new Runnable() {
@@ -153,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-
                 }
                 else if(position==6){
                     new Thread( new Runnable() {
@@ -172,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-
                 }
                 else if(position==7){
                     new Thread( new Runnable() {
