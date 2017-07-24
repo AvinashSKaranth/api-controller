@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFileNotify("http://quiklrn.com/user/notification/attachment.php?notifier_attachment_id=9&auth_code=b62745967b36451b2159b22301a9d7a8", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/data");
+                            final String result  = APIc.DownloadFileNotify("http://quiklrn.com/user/notification/attachment.php?notifier_attachment_id=9&auth_code=b62745967b36451b2159b22301a9d7a8", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/data","title",1);
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFileNotify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test");
+                            final String result  = APIc.DownloadFileNotify("http://nashapp.in/test.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test","title",1);
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFileNotify("http://nashapp.in/test123", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt");
+                            final String result  = APIc.DownloadFileNotify("https://www.figma.com/404", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test.txt","title",1);
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {

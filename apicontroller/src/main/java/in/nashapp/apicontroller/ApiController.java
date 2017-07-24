@@ -31,7 +31,6 @@ import java.util.List;
 
 public class ApiController{
     Context C;
-    int notify_id=0;
     public ApiController(Context context){
         this.C = context;
     }
@@ -336,6 +335,8 @@ public class ApiController{
                 connection = (HttpURLConnection) new URL(newUrl).openConnection();
                 status = connection.getResponseCode();
             }
+            if(status==HttpURLConnection.HTTP_NOT_FOUND)
+                return "";
             String raw  = "";
             String type = "";
             String extension="";
@@ -359,7 +360,7 @@ public class ApiController{
             InputStream is = connection.getInputStream();
             FileOutputStream outputStream = new FileOutputStream(filePath);
             int bytesRead = -1;
-            byte[] buffer = new byte[1024000];
+            byte[] buffer = new byte[65536];
             while ((bytesRead = is.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }
@@ -372,7 +373,7 @@ public class ApiController{
         }
         return filePath;
     }
-    public String DownloadFileNotify(String urlString,String dst){
+    public String DownloadFileNotify(String urlString,String dst,String title,int notify_id){
         if(!new File(dst.substring(0,dst.lastIndexOf("/"))).exists())
             new File(dst.substring(0,dst.lastIndexOf("/"))).mkdirs();
         CookieManager cookieManager = new CookieManager( new PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
@@ -383,8 +384,6 @@ public class ApiController{
         mBuilder.setContentTitle("Download")
                 .setContentText("Download in progress")
                 .setSmallIcon(R.drawable.ic_file_download_black);
-        int current_notify_id =notify_id;
-        notify_id++;
         try {
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
@@ -398,6 +397,8 @@ public class ApiController{
                 connection = (HttpURLConnection) new URL(newUrl).openConnection();
                 status = connection.getResponseCode();
             }
+            if(status==HttpURLConnection.HTTP_NOT_FOUND)
+                return "";
             int lenghtOfFile = connection.getContentLength();
             String raw  = "";
             String type = "";
@@ -423,18 +424,23 @@ public class ApiController{
             InputStream is = connection.getInputStream();
             FileOutputStream outputStream = new FileOutputStream(filePath);
             int bytesRead = -1;
-            byte[] buffer = new byte[1024000];
+            byte[] buffer = new byte[65536];
             int count=0;
-
+            mBuilder.setContentTitle(title);
+            mBuilder.setContentText("0% Complete");
+            mBuilder.setProgress(lenghtOfFile,0, false);
+            mNotifyManager.notify(notify_id, mBuilder.build());
             while ((bytesRead = is.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
                 count = count+bytesRead;
-                mBuilder.setContentTitle(dst.substring(dst.lastIndexOf("/") + 1));
-                mBuilder.setContentText((int) ((float) (count*100 + 1) / (float) (lenghtOfFile)) + "% Complete");
-                mBuilder.setProgress(lenghtOfFile, count + 1, false);
-                mNotifyManager.notify(current_notify_id, mBuilder.build());
+                if(((float) (count*100 + 1) / (float) (lenghtOfFile))>0) {
+                    mBuilder.setContentTitle(title);
+                    mBuilder.setContentText((int) ((float) (count * 100 + 1) / (float) (lenghtOfFile)) + "% Complete");
+                    mBuilder.setProgress(lenghtOfFile, count + 1, false);
+                    mNotifyManager.notify(notify_id, mBuilder.build());
+                }
             }
-            mNotifyManager.cancel(current_notify_id);
+            mNotifyManager.cancel(notify_id);
             outputStream.close();
             is.close();
             connection.disconnect();
