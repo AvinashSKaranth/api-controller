@@ -321,7 +321,6 @@ public class ApiController{
         CookieManager cookieManager = new CookieManager( new PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         String filePath ="";
-
         try {
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
