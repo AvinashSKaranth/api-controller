@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         APIc = new ApiController(this);
-        final String names[] = {"Get Request","Post Request","Post File + Variables","Download","Download with Notify","Download without extension","Download wrong url","Download with with POST file"};
+        final String names[] = {"Get Request","Post Request","Post File + Variables","Download","Download with Notify","Download without extension","Download wrong url","Download with with POST file","Multi Thread Requests"};
         ListView listview = (ListView) findViewById(R.id.listview);
         ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1, names);
         listview.setAdapter(adapter);
@@ -181,6 +182,65 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     alertDialog("Result", result);
+                                }
+                            });
+                        }
+                    }).start();
+                }
+                else if(position==8){
+                    new Thread( new Runnable() {
+                        @Override
+                        public void run() {
+                            //Network Operation
+                            HashMap<String,String> params = new HashMap<String, String>();
+                            params.put("post_request1", "1");
+                            params.put("post_request2", "2");
+                            params.put("post_request3", "3");
+                            Log.d("Request",1+"");
+                            final String result  = APIc.GetRequest("http://nashapp.in/request.php",params,false);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //UI Operation using network data
+                                    alertDialog("Result1", result);
+                                }
+                            });
+                        }
+                    }).start();
+                    new Thread( new Runnable() {
+                        @Override
+                        public void run() {
+                            //Network Operation
+                            HashMap<String,String> params = new HashMap<String, String>();
+                            params.put("post_request1", "1");
+                            params.put("post_request2", "2");
+                            params.put("post_request3", "3");
+                            Log.d("Request",2+"");
+                            final String result  = APIc.GetRequest("http://nashapp.in/request.php",params,false);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //UI Operation using network data
+                                    alertDialog("Result2", result);
+                                }
+                            });
+                        }
+                    }).start();
+                    new Thread( new Runnable() {
+                        @Override
+                        public void run() {
+                            //Network Operation
+                            HashMap<String,String> params = new HashMap<String, String>();
+                            params.put("post_request1", "1");
+                            params.put("post_request2", "2");
+                            params.put("post_request3", "3");
+                            Log.d("Request",3+"");
+                            final String result  = APIc.GetRequest("http://nashapp.in/request.php",params,false);
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //UI Operation using network data
+                                    alertDialog("Result3", result);
                                 }
                             });
                         }

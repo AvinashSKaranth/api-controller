@@ -45,13 +45,15 @@ public class ApiController{
         CookieManager cookieManager = new CookieManager( new PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         try {
-            File httpCacheDir;
-            if(C.getExternalCacheDir()!=null)
-                httpCacheDir = new File(C.getExternalCacheDir(), "http");
-            else
-                httpCacheDir = new File(C.getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            if(cached) {
+                File httpCacheDir;
+                if (C.getExternalCacheDir() != null)
+                    httpCacheDir = new File(C.getExternalCacheDir(), "http");
+                else
+                    httpCacheDir = new File(C.getCacheDir(), "http");
+                long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+                HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            }
         }catch (IOException e) {
             Log.i("ApiController", "HTTP response cache installation failed:" + Log.getStackTraceString(e));
         }
@@ -104,13 +106,15 @@ public class ApiController{
         CookieManager cookieManager = new CookieManager( new in.nashapp.apicontroller.PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         try {
-            File httpCacheDir;
-            if(C.getExternalCacheDir()!=null)
-                httpCacheDir = new File(C.getExternalCacheDir(), "http");
-            else
-                httpCacheDir = new File(C.getCacheDir(), "http");
-            long httpCacheSize = 100 * 1024 * 1024; // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            if(cached) {
+                File httpCacheDir;
+                if (C.getExternalCacheDir() != null)
+                    httpCacheDir = new File(C.getExternalCacheDir(), "http");
+                else
+                    httpCacheDir = new File(C.getCacheDir(), "http");
+                long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+                HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            }
         }catch (IOException e) {
             Log.i("ApiController", "HTTP response cache installation failed:" + Log.getStackTraceString(e));
         }
@@ -206,13 +210,15 @@ public class ApiController{
         CookieManager cookieManager = new CookieManager( new in.nashapp.apicontroller.PersistentCookieStore(C), CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
         try {
-            File httpCacheDir;
-            if(C.getExternalCacheDir()!=null)
-                httpCacheDir = new File(C.getExternalCacheDir(), "http");
-            else
-                httpCacheDir = new File(C.getCacheDir(), "http");
-            long httpCacheSize = 100 * 1024 * 1024; // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            if(cached) {
+                File httpCacheDir;
+                if (C.getExternalCacheDir() != null)
+                    httpCacheDir = new File(C.getExternalCacheDir(), "http");
+                else
+                    httpCacheDir = new File(C.getCacheDir(), "http");
+                long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
+                HttpResponseCache.install(httpCacheDir, httpCacheSize);
+            }
         }catch (IOException e) {
             Log.i("ApiController", "HTTP response cache installation failed:" + Log.getStackTraceString(e));
         }
