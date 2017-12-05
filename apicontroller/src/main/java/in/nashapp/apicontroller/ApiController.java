@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.http.HttpResponseCache;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.util.Patterns;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -24,6 +26,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Avinash on 19-11-2015.
@@ -294,7 +298,12 @@ public class ApiController{
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                extension = raw.split("=")[1].replace("\"","");
+                //extension = raw.split("=")[1].replace("\"","");
+                //extension = extension.substring(extension.indexOf(".")+1);
+                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+                Matcher matcher = pattern.matcher(raw);
+                matcher.find();
+                extension = matcher.group(0).replace("filename=\"","");
                 extension = extension.substring(extension.indexOf(".")+1);
             }else if(url.substring(url.lastIndexOf("/")+1).contains(".")) {
                 extension =url.substring(url.lastIndexOf("/")+1);
@@ -351,7 +360,10 @@ public class ApiController{
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                extension = raw.split("=")[1].replace("\"","");
+                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+                Matcher matcher = pattern.matcher(raw);
+                matcher.find();
+                extension = matcher.group(0).replace("filename=\"","");
                 extension = extension.substring(extension.indexOf(".")+1);
             }else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
                 extension =urlString.substring(urlString.lastIndexOf("/")+1);
@@ -415,7 +427,12 @@ public class ApiController{
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                extension = raw.split("=")[1].replace("\"","");
+                ///extension = raw.split("=")[1].replace("\"","");
+                //extension = extension.substring(extension.indexOf(".")+1);
+                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+                Matcher matcher = pattern.matcher(raw);
+                matcher.find();
+                extension = matcher.group(0).replace("filename=\"","");
                 extension = extension.substring(extension.indexOf(".")+1);
             }else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
                 extension =urlString.substring(urlString.lastIndexOf("/")+1);
