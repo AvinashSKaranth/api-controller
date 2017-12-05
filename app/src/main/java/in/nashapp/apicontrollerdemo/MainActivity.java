@@ -139,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFileNotify("https://uc00002.quiklrn.com/?rememberme=ZDNlNGMwODNmYTEwNWE1MzFiMjM5ZTgw&document_id=9301&user_id=19&method=download", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test","title",1);
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            final String result  = APIc.DownloadFileNotify("http:nashapp.in/text.txt", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/test","title",1);                      new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
                                     //Intent intent = new Intent();
