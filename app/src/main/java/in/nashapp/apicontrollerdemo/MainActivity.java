@@ -103,13 +103,13 @@ public class MainActivity extends AppCompatActivity {
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFile("http://nashapp.in/socialsignin.png", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/socialsignin.png");
+                            final String result  = APIc.DownloadFile("https://link.springer.com/content/pdf/bfm%3A978-3-319-46499-2%2F1.pdf", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/data.pdf");
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
                                     Intent intent = new Intent();
                                     intent.setAction(Intent.ACTION_VIEW);
-                                    intent.setDataAndType(Uri.parse("file://" + result), "image/*");
+                                    intent.setDataAndType(Uri.parse("file://" + result), "application/pdf");
                                     startActivity(intent);
                                     //alertDialog("Result", result);
                                 }

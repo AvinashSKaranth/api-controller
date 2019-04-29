@@ -76,7 +76,7 @@ public class ApiController{
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("GET");
-            connection.setReadTimeout(30000);
+            connection.setReadTimeout(60000);
             if(cached)
                 connection.addRequestProperty("Cache-Control", "max-stale=" + 60 * 60 *3);
             InputStream is = connection.getInputStream();
@@ -131,8 +131,8 @@ public class ApiController{
         conn.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Accept-Charset", charset);
-        conn.setReadTimeout(30000);
-        conn.setConnectTimeout(30000);
+        conn.setReadTimeout(60000);
+        conn.setConnectTimeout(60000);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         if(cached)
@@ -291,19 +291,15 @@ public class ApiController{
             }
             try{raw = conn.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = conn.getContentType();}catch (Exception e){type="";}
-            Log.d("ApiController",raw+"\t"+type);
-            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                ///extension = raw.split("=")[1].replace("\"","");
-                //extension = extension.substring(extension.indexOf(".")+1);
-                try{
-                    Pattern pattern = Pattern.compile("filename=\"[^\"]*");
-                    Matcher matcher = pattern.matcher(raw);
-                    matcher.find();
-                    extension = matcher.group(0).replace("filename=\"","");
-                    Log.d("Filename",extension);
-                    extension = extension.substring(extension.indexOf(".")+1);
-                }catch(Exception e) {}
-            }else if(!type.equals("")&&!type.equals("application/octet-stream")){
+            try{
+                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+                Matcher matcher = pattern.matcher(raw);
+                matcher.find();
+                extension = matcher.group(0).replace("filename=\"","");
+                Log.d("Filename",extension);
+                extension = extension.substring(extension.indexOf(".")+1);
+            }catch (Exception e){extension="";}
+            if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(url.substring(url.lastIndexOf("/")+1).contains(".")) {
@@ -341,7 +337,7 @@ public class ApiController{
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setReadTimeout(30000);
+            connection.setReadTimeout(300000);
             connection.setDoOutput(false);
             connection.setInstanceFollowRedirects(true);
             int status = connection.getResponseCode();
@@ -357,14 +353,15 @@ public class ApiController{
             String extension="";
             try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = connection.getContentType();}catch (Exception e){type="";}
-            Pattern pattern = Pattern.compile("filename=\"[^\"]*");
-            Matcher matcher = pattern.matcher(raw);
-            matcher.find();
-            if(matcher.group(0)!=null&&!matcher.group(0).equals("")) {
+            try{
+                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+                Matcher matcher = pattern.matcher(raw);
+                matcher.find();
                 extension = matcher.group(0).replace("filename=\"","");
                 Log.d("Filename",extension);
                 extension = extension.substring(extension.indexOf(".")+1);
-            }else if(!type.equals("")&&!type.equals("application/octet-stream")){
+            }catch (Exception e){extension="";}
+            if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
             }else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
@@ -408,7 +405,7 @@ public class ApiController{
             HttpURLConnection connection = (HttpURLConnection)url.openConnection();
             connection.setInstanceFollowRedirects(true);
             connection.setRequestMethod("GET");
-            connection.setReadTimeout(30000);
+            connection.setReadTimeout(300000);
             connection.setDoOutput(false);
             int status = connection.getResponseCode();
             while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
