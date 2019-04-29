@@ -2,10 +2,8 @@ package in.nashapp.apicontroller;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.http.HttpResponseCache;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.util.Patterns;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -297,12 +295,14 @@ public class ApiController{
             if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
                 ///extension = raw.split("=")[1].replace("\"","");
                 //extension = extension.substring(extension.indexOf(".")+1);
-                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
-                Matcher matcher = pattern.matcher(raw);
-                matcher.find();
-                extension = matcher.group(0).replace("filename=\"","");
-                Log.d("Filename",extension);
-                extension = extension.substring(extension.indexOf(".")+1);
+                try{
+                    Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+                    Matcher matcher = pattern.matcher(raw);
+                    matcher.find();
+                    extension = matcher.group(0).replace("filename=\"","");
+                    Log.d("Filename",extension);
+                    extension = extension.substring(extension.indexOf(".")+1);
+                }catch(Exception e) {}
             }else if(!type.equals("")&&!type.equals("application/octet-stream")){
                 MimeType mimeType = new MimeType();
                 extension = mimeType.get_extension_from_mimetye(type);
@@ -357,12 +357,10 @@ public class ApiController{
             String extension="";
             try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
             try{type = connection.getContentType();}catch (Exception e){type="";}
-            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                ///extension = raw.split("=")[1].replace("\"","");
-                //extension = extension.substring(extension.indexOf(".")+1);
-                Pattern pattern = Pattern.compile("filename=\"[^\"]*");
-                Matcher matcher = pattern.matcher(raw);
-                matcher.find();
+            Pattern pattern = Pattern.compile("filename=\"[^\"]*");
+            Matcher matcher = pattern.matcher(raw);
+            matcher.find();
+            if(matcher.group(0)!=null&&!matcher.group(0).equals("")) {
                 extension = matcher.group(0).replace("filename=\"","");
                 Log.d("Filename",extension);
                 extension = extension.substring(extension.indexOf(".")+1);
