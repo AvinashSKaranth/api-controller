@@ -280,32 +280,30 @@ public class ApiController{
             }
             wr.flush();
             wr.close();
-            String raw  = "";
-            String type = "";
             String extension="";
-            int status = conn.getResponseCode();
-            while(status != HttpURLConnection.HTTP_OK&&(status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER)){
-                String newUrl = conn.getHeaderField("Location");
-                conn = (HttpURLConnection) new URL(newUrl).openConnection();
-                status = conn.getResponseCode();
-            }
-            try{raw = conn.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
-            try{type = conn.getContentType();}catch (Exception e){type="";}
             try{
+                String raw = conn.getHeaderField("Content-Disposition");
                 Pattern pattern = Pattern.compile("filename=\"[^\"]*");
                 Matcher matcher = pattern.matcher(raw);
                 matcher.find();
                 extension = matcher.group(0).replace("filename=\"","");
-                Log.d("Filename",extension);
                 extension = extension.substring(extension.indexOf(".")+1);
             }catch (Exception e){extension="";}
-            if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
-                MimeType mimeType = new MimeType();
-                extension = mimeType.get_extension_from_mimetye(type);
-            }else if(url.substring(url.lastIndexOf("/")+1).contains(".")) {
-                extension =url.substring(url.lastIndexOf("/")+1);
-            }else{
-                extension = "png";
+            try{
+                String type = conn.getContentType();
+                if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
+                    MimeType mimeType = new MimeType();
+                    extension = mimeType.get_extension_from_mimetye(type);
+                }
+            }catch (Exception e){}
+            try {
+                if (extension.equals("") && url.substring(url.lastIndexOf("/") + 1).contains(".")) {
+                    extension = url.substring(url.lastIndexOf("/") + 1);
+                }
+            }catch(Exception e){
+                if (extension.equals("")){
+                    extension = "png";
+                }
             }
             if(dst.substring(dst.lastIndexOf("/")+1).contains("."))
                 filePath = dst;
@@ -348,26 +346,30 @@ public class ApiController{
             }
             if(status==HttpURLConnection.HTTP_NOT_FOUND)
                 return "";
-            String raw  = "";
-            String type = "";
             String extension="";
-            try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
-            try{type = connection.getContentType();}catch (Exception e){type="";}
             try{
+                String raw = connection.getHeaderField("Content-Disposition");
                 Pattern pattern = Pattern.compile("filename=\"[^\"]*");
                 Matcher matcher = pattern.matcher(raw);
                 matcher.find();
                 extension = matcher.group(0).replace("filename=\"","");
-                Log.d("Filename",extension);
                 extension = extension.substring(extension.indexOf(".")+1);
             }catch (Exception e){extension="";}
-            if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
-                MimeType mimeType = new MimeType();
-                extension = mimeType.get_extension_from_mimetye(type);
-            }else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
-                extension =urlString.substring(urlString.lastIndexOf("/")+1);
-            }else{
-                extension = "png";
+            try{
+                String type = connection.getContentType();
+                if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
+                    MimeType mimeType = new MimeType();
+                    extension = mimeType.get_extension_from_mimetye(type);
+                }
+            }catch (Exception e){}
+            try {
+                if (extension.equals("") && urlString.substring(urlString.lastIndexOf("/") + 1).contains(".")) {
+                    extension = urlString.substring(urlString.lastIndexOf("/") + 1);
+                }
+            }catch(Exception e){
+                if (extension.equals("")){
+                    extension = "png";
+                }
             }
             if(dst.substring(dst.lastIndexOf("/")+1).contains("."))
                 filePath = dst;
@@ -416,28 +418,30 @@ public class ApiController{
             if(status==HttpURLConnection.HTTP_NOT_FOUND)
                 return "";
             int lenghtOfFile = connection.getContentLength();
-            String raw  = "";
-            String type = "";
             String extension="";
-            try{raw = connection.getHeaderField("Content-Disposition");}catch (Exception e){raw="";}
-            try{type = connection.getContentType();}catch (Exception e){type="";}
-            Log.d("ApiController",raw+" "+type);
-            if(raw!=null&&!raw.equals("")&& raw.contains("=")) {
-                ///extension = raw.split("=")[1].replace("\"","");
-                //extension = extension.substring(extension.indexOf(".")+1);
+            try{
+                String raw = connection.getHeaderField("Content-Disposition");
                 Pattern pattern = Pattern.compile("filename=\"[^\"]*");
                 Matcher matcher = pattern.matcher(raw);
                 matcher.find();
                 extension = matcher.group(0).replace("filename=\"","");
-                Log.d("Filename",extension);
                 extension = extension.substring(extension.indexOf(".")+1);
-            }else if(!type.equals("")&&!type.equals("application/octet-stream")){
-                MimeType mimeType = new MimeType();
-                extension = mimeType.get_extension_from_mimetye(type);
-            } else if(urlString.substring(urlString.lastIndexOf("/")+1).contains(".")) {
-                extension =urlString.substring(urlString.lastIndexOf("/")+1);
-            }else{
-                extension = "png";
+            }catch (Exception e){extension="";}
+            try{
+                String type = connection.getContentType();
+                if(extension.equals("")&&!type.equals("")&&!type.equals("application/octet-stream")){
+                    MimeType mimeType = new MimeType();
+                    extension = mimeType.get_extension_from_mimetye(type);
+                }
+            }catch (Exception e){}
+            try {
+                if (extension.equals("") && urlString.substring(urlString.lastIndexOf("/") + 1).contains(".")) {
+                    extension = urlString.substring(urlString.lastIndexOf("/") + 1);
+                }
+            }catch(Exception e){
+                if (extension.equals("")){
+                    extension = "png";
+                }
             }
             if(dst.substring(dst.lastIndexOf("/")+1).contains("."))
                 filePath = dst;

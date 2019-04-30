@@ -116,12 +116,11 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-                }
-                else if(position==4){
+                }else if(position==4){
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
-                            final String result  = APIc.DownloadFileNotify("https://uc00001.quiklrn.com/?user_id=19&rememberme=MjE1ZjI5MTdlNGM2ZTFhYTQzZGM3Y2E0&document_id=9295&method=download", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/data","title",1);
+                            final String result  = APIc.DownloadFileNotify("https://dl00005.quiklrn.com/?book_file_id=79020&user_id=19&purchase_auth_code=e3f32bc80244d5f911eab606f90c0b1", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/data","title",1);
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -134,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     }).start();
-                }
-                else if(position==5){
+                }else if(position==5){
                     new Thread( new Runnable() {
                         @Override
                         public void run() {
